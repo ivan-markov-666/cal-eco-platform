@@ -6,6 +6,36 @@ A production-ready full-stack decentralized application showcasing modern blockc
 
 This project demonstrates a comprehensive Web3 platform combining prediction markets, staking mechanisms, and exchange functionality. The platform features seamless external integrations, real-time updates, and a robust RESTful API architecture designed for scalability and maintainability.
 
+## ⚠️ Implementation Status
+
+**Current State**: Design prototype with production-grade UI
+
+**What Works**:
+- ✅ Complete visual design and components
+- ✅ Dashboard, portfolio, charts, transactions (UI only)
+
+**What Doesn't Work**:
+- ❌ Authentication (endpoint mismatch: Frontend `/auth` ≠ Backend `/api/v1/auth`)
+- ❌ Backend integrations (Market data, portfolio calculations, transactions)
+- ❌ Web3 wallets (MetaMask, Phantom, Coinbase, WalletConnect)
+- ❌ Google OAuth (not implemented)
+
+**Data**: All displayed data is static/mock - not connected to backend services.
+
+**Testing**: No automated tests. No CI/CD pipeline.
+
+This README describes the planned architecture, not the current implementation.
+See [DEVELOPMENT-STATUS.md](./DEVELOPMENT-STATUS.md) for a detailed rundown of current capabilities and priorities.
+
+### Claim vs Reality
+
+| Claim (Planned Architecture) | Reality (Jan 2026) |
+| --- | --- |
+| “Production-ready full-stack decentralised application.” | Production-grade **UI prototype** with mock/in-memory backend and no live integrations. |
+| Fully functional prediction markets, staking automation, referrals, notifications, support, and admin controls. | Corresponding routes/controllers exist, but all business logic relies on mocked data and is not wired to real services. |
+| Integrated Web3 wallets (MetaMask, Phantom, Coinbase, WalletConnect) and Google OAuth. | Wallet and OAuth flows are UI-only (no provider detection), signing, or OAuth callbacks are implemented. |
+| Tested & deployable system. | **No** automated tests, CI/CD, or deployment scripts—manual validation only. |
+
 ## Key Features
 
 - **Prediction Markets**: Bull/Bear prediction system with live price feeds and automated round management
@@ -99,6 +129,35 @@ Once both servers are running:
 - **Frontend**: Open [http://localhost:2468](http://localhost:2468) in your browser
 - **Backend API**: Available at [http://localhost:1357/api](http://localhost:1357/api)
 - **Health Check**: [http://localhost:1357](http://localhost:1357)
+
+## Testing
+
+**Status**: No testing infrastructure.
+
+To validate changes: `npm start` → Manual testing at [http://localhost:2468](http://localhost:2468)
+
+### Recommended Early-Cycle Testing Strategy
+
+1. **Sprint Planning**  
+   - Define acceptance criteria + user journeys before implementation.  
+   - Pair designers/devs to produce testable UI states (Figma references, fixtures).
+2. **Component & Hook Tests**  
+   - Use React Testing Library for visual components and hooks, focused on wallet/auth flows, staking widgets, and dashboard cards.  
+   - Snapshot critical layout states to detect regression in mock-driven UI.
+3. **Contract Tests for Mock APIs**  
+   - Write Jest contract tests against the in-memory services to lock request/response schemas before wiring real data.  
+   - Generate shared TypeScript types from these contracts to keep frontend/back-end aligned.
+4. **Integration Smoke Tests**  
+   - Spin up both servers via `npm start` and run Playwright smoke flows (login, dashboard load, staking plan view).  
+   - Fail the pipeline if any page relies on missing backend endpoints.
+5. **Static + Lint Gates (Daily)**  
+   - Enforce TypeScript strict mode, ESLint, and Prettier in pre-commit hooks.  
+   - Add `npm run lint && npm test` to CI.
+6. **Exploratory Regression (Weekly)**  
+   - QA/dev buddy system runs scripted scenarios focusing on admin dashboards, referrals, and wallet prompts.  
+   - Capture findings in DEVELOPMENT-STATUS to keep documentation truthful.
+
+**Known Issues**: Auth broken, Web3 integrations incomplete, no backend connections.
 
 ## What Makes This Special
 
